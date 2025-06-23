@@ -1,41 +1,35 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
+
+<footer class="site-footer-wrapper">
+  <div class="footer-container">
+    {%- if section.settings.footer_menu.links.size > 0 -%}
+      <div class="footer-block footer-menu">
+        <h4 class="footer-title">{{ 'footer.quick_links' | t }}</h4>
+        <ul class="footer-link-list">
+          {%- for link in section.settings.footer_menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    <div class="footer-block footer-info">
+      <h4 class="footer-title">Our Store</h4>
+      <p>Here you can place a short information about your store, address or contact details.</p>
+    </div>
   </div>
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
-
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+  <div class="footer-bottom">
+    <div class="footer-copyright">
+      &copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url }}.
+    </div>
+    {%- if section.settings.show_payment_icons -%}
+      <div class="footer-payment-icons">
+        {{- payment_type_svg_tags -}}
+      </div>
+    {%- endif -%}
   </div>
 </footer>
-
-{% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-  }
-  footer a {
-    text-decoration: none;
-    color: var(--color-foreground);
-  }
-  footer .footer__links,
-  footer .footer__payment {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
 
 {% schema %}
 {
@@ -43,8 +37,9 @@
   "settings": [
     {
       "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "id": "footer_menu",
+      "label": "Footer menu",
+      "default": "footer"
     },
     {
       "type": "checkbox",

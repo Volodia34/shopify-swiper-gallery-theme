@@ -1,0 +1,98 @@
+.site-footer-wrapper {
+    margin-top: auto;
+    padding: 40px var(--page-margin);
+    background-color: #f8f8f8;
+    border-top: 1px solid #e7e7e7;
+    color: var(--color-foreground);
+}
+
+.footer-container {
+    max-width: var(--page-width);
+    margin: 0 auto 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+}
+
+.footer-title {
+    margin: 0 0 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.footer-block p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.footer-link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-link-list li {
+    margin-bottom: 8px;
+}
+
+.footer-link-list a {
+    text-decoration: none;
+    color: var(--color-foreground);
+    transition: color 0.3s ease;
+}
+
+.footer-link-list a:hover {
+    text-decoration: underline;
+}
+
+/* Newsletter form styles */
+.newsletter-form {
+    display: flex;
+    margin-top: 15px;
+}
+
+.newsletter-form input[type="email"] {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px 0 0 4px;
+}
+
+.newsletter-form button {
+    border: 1px solid #333;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+    white-space: nowrap;
+}
+
+.newsletter-form button:hover {
+    background-color: #555;
+}
+
+
+/* Footer bottom */
+.footer-bottom {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding-top: 20px;
+    border-top: 1px solid #e7e7e7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 0.9rem;
+}
+
+.footer-payment-icons {
+    display: flex;
+    gap: 5px;
+}
+
+.footer-payment-icons .shopify-payment-button__button--svg {
+    height: 24px;
+}

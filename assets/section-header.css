@@ -1,0 +1,76 @@
+.site-header {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: var(--color-background); /* Використовуємо глобальні змінні теми */
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--page-width); /* Використовуємо глобальні змінні теми */
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+}
+
+.header-left, .header-center, .header-right {
+    flex: 1;
+}
+
+.header-center {
+    display: flex;
+    justify-content: center;
+}
+
+.header-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.header-logo img {
+    max-width: 150px;
+    height: auto;
+}
+
+.header-shop-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--color-foreground);
+}
+
+.header-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 25px;
+}
+
+.header-nav-link {
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-size: 1rem;
+    padding: 5px 0;
+    position: relative;
+}
+
+.header-nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-foreground);
+    transition: width 0.3s ease;
+}
+
+.header-nav-link:hover::after {
+    width: 100%;
+}
+
+.header-cart-icon {
+    text-decoration: none;
+    color: var(--color-foreground);
+}
