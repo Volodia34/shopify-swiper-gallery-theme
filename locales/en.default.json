@@ -37,6 +37,10 @@
     "expires_on": "Expires on {{ expires_on }}",
     "use_at_checkout": "Use this gift card at checkout"
   },
+  "general": {
+    "continue_shopping": "Continue shopping",
+    "search": "Search"
+  },
   "password": {
     "title": "This shop is private",
     "password": "Password",
@@ -48,5 +52,25 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "sections": {
+    "cart": {
+      "name": "Cart page",
+      "title": "Your cart",
+      "empty": "Your cart is empty",
+      "headings": {
+        "product": "Product",
+        "price": "Price",
+        "quantity": "Quantity",
+        "total": "Total"
+      },
+      "quantity_for_product": "Quantity for {{ product }}",
+      "remove_product": "Remove {{ product }}",
+      "summary": "Summary",
+      "subtotal": "Subtotal",
+      "shipping_at_checkout": "Taxes and shipping calculated at checkout.",
+      "update": "Update",
+      "checkout": "Checkout"
+    }
   }
 }

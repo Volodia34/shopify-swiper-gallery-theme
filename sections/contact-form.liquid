@@ -1,0 +1,99 @@
+{{ 'section-contact-form.css' | asset_url | stylesheet_tag }}
+
+<div class="contact-container">
+    <div class="contact-header">
+        {%- if section.settings.title != blank -%}
+            <h2 class="contact-header__title">{{ section.settings.title | escape }}</h2>
+        {%- endif -%}
+    </div>
+
+    {%- form 'contact', id: 'ContactForm', class: 'contact-form' -%}
+        {%- if form.posted_successfully? -%}
+            <p class="form-status form-status--success" tabindex="-1" autofocus>
+                {{ 'contact.form.post_success' | t }}
+            </p>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+            <div class="form-status form-status--error">
+                <h2 class="h3" role="alert">{{ 'contact.form.error_heading' | t }}</h2>
+                <ul class="form-status__list">
+                    {%- for field in form.errors -%}
+                        <li>
+                            <a href="#ContactForm-{{ field }}" class="link">
+                                {%- if field == 'form' -%}
+                                    {{ form.errors.messages[field] }}
+                                {%- else -%}
+                                    {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                                {%- endif -%}
+                            </a>
+                        </li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        {%- endif -%}
+
+        <div class="form-group">
+            <label class="form-label" for="ContactForm-name">{{ 'contact.form.name' | t }}</label>
+            <input class="form-input" type="text" id="ContactForm-name" name="contact[{{ 'contact.form.name' | t }}]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" autocomplete="name">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="ContactForm-email">{{ 'contact.form.email' | t }}</label>
+            <input
+                    class="form-input"
+                    autocomplete="email"
+                    type="email"
+                    id="ContactForm-email"
+                    name="contact[email]"
+                    spellcheck="false"
+                    autocapitalize="off"
+                    value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                    aria-required="true"
+                    {% if form.errors contains 'email' %}
+                        aria-invalid="true"
+                    {% endif %}
+            >
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="ContactForm-phone">{{ 'contact.form.phone' | t }}</label>
+            <input class="form-input" type="tel" id="ContactForm-phone" name="contact[{{ 'contact.form.phone' | t }}]" pattern="[0-9\-]*" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}" autocomplete="tel">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="ContactForm-body">{{ 'contact.form.comment' | t }}</label>
+            <textarea
+                    rows="10"
+                    class="form-input"
+                    id="ContactForm-body"
+                    name="contact[{{ 'contact.form.comment' | t }}]"
+            >
+        {{- form.body -}}
+      </textarea>
+        </div>
+
+        <button type="submit" class="contact-form__submit">
+            {{ 'contact.form.send' | t }}
+        </button>
+    {%- endform -%}
+</div>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Contact us"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact form"
+    }
+  ]
+}
+{% endschema %}
