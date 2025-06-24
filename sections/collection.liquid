@@ -1,3 +1,5 @@
+{{ 'section-collection.css' | asset_url | stylesheet_tag }}
+
 {% comment %}
   This section is used in the collection template to render collection page
   listing all products within a collection.
@@ -5,39 +7,43 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
+<div class="collection-container">
+  <div class="collection-header">
+    <h1 class="collection-header__title">{{ collection.title }}</h1>
+  </div>
 
-<div class="collection-products">
   {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
-      </div>
-    {% endfor %}
+    <div class="collection-products">
+      {% for product in collection.products %}
+        <a href="{{ product.url }}" class="collection-product">
+          <div class="collection-product__image-wrapper">
+            {% if product.featured_image %}
+              {% render 'image',
+                      class: 'collection-product__image',
+                      image: product.featured_image,
+                      width: 400,
+                      height: 400,
+                      crop: 'center'
+              %}
+            {% else %}
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+          </div>
+          <div class="collection-product__content">
+            <p class="collection-product__title">{{ product.title | escape }}</p>
+            <p class="collection-product__price">{{ product.price | money }}</p>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
 
-    {{ paginate | default_pagination }}
+    {% if paginate.pages > 1 %}
+      <div class="collection-pagination">
+        {{ paginate | default_pagination }}
+      </div>
+    {% endif %}
   {% endpaginate %}
 </div>
-
-{% stylesheet %}
-  .collection-products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-  }
-{% endstylesheet %}
 
 {% schema %}
 {
