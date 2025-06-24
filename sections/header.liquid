@@ -5,7 +5,7 @@
     <div class="header-left">
       {%- if section.settings.logo != blank -%}
         <a href="{{ routes.root_url }}" class="header-logo">
-          {{ section.settings.logo | image_url: width: 200 | image_tag:
+          {{ section.settings.logo | image_url: width: 280 | image_tag:
           loading: 'lazy',
           alt: section.settings.logo.alt | default: shop.name
           }}
@@ -30,13 +30,46 @@
     </div>
 
     <div class="header-right">
-      <a href="{{ routes.cart_url }}" class="header-cart-icon">
-        <span>{{ 'cart.title' | t }}</span>
-        <span class="cart-count">({{ cart.item_count }})</span>
+      <a href="{{ routes.search_url }}" class="header-icon header-search-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-search" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span class="visually-hidden">{{ 'general.search.title' | t }}</span>
+      </a>
+      <a href="{{ routes.cart_url }}" class="header-icon header-cart-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-cart" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span class="visually-hidden">{{ 'cart.title' | t }}</span>
+        {%- if cart.item_count > 0 -%}
+          <span class="cart-count-badge">{{ cart.item_count }}</span>
+        {%- endif -%}
       </a>
     </div>
   </div>
 </header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+
+    let lastScrollTop = 0;
+
+    window.addEventListener('scroll', () => {
+      let st = window.pageYOffset || document.documentElement.scrollTop;
+      if (st > lastScrollTop && st > header.offsetHeight){
+        header.classList.add('is-hidden');
+      } else {
+        header.classList.remove('is-hidden');
+      }
+      lastScrollTop = st <= 0 ? 0 : st;
+    }, { passive: true });
+  });
+</script>
 
 {% schema %}
 {

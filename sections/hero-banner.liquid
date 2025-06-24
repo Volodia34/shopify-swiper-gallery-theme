@@ -1,0 +1,138 @@
+{{ 'section-hero-banner.css' | asset_url | stylesheet_tag }}
+
+<section class="hero-banner{% if section.settings.full_width %} full-width{% endif %}">
+    <div class="hero-content-wrapper">
+        <div class="hero-content">
+            {% if section.settings.heading != blank %}
+                <h1 class="hero-heading">{{ section.settings.heading }}</h1>
+            {% endif %}
+
+            {% if section.settings.subheading != blank %}
+                <div class="hero-subheading">{{ section.settings.subheading }}</div>
+            {% endif %}
+
+            {% if section.settings.button_text != blank %}
+                <a href="{{ section.settings.button_link }}" class="hero-button button">
+                    {{ section.settings.button_text }}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="hero-image-container">
+        {% if section.settings.image != blank %}
+            {{ section.settings.image | image_url: width: 2000 | image_tag:
+            loading: 'eager',
+            class: 'hero-image',
+            sizes: '100vw',
+            alt: section.settings.image.alt | default: section.settings.heading
+            }}
+        {% else %}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'hero-image placeholder' }}
+        {% endif %}
+    </div>
+
+    {% if section.settings.overlay_opacity > 0 %}
+        <div class="hero-overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+    {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Welcome to our store"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Share information about your brand with your customers.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ],
+      "default": "text-center"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Section height",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
