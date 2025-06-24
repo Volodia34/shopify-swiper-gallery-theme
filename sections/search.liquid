@@ -1,66 +1,63 @@
-{% comment %}
-  This section is used in the search template to render search results for
-  products, articles, and pages.
+{{ 'section-search.css' | asset_url | stylesheet_tag }}
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/search
-{% endcomment %}
+<div class="search-container">
+  <div class="search-header">
+    <h1 class="search-header__title">{{ 'search.title' | t }}</h1>
+  </div>
 
-<h1>{{ 'search.title' | t }}</h1>
+  <div class="search-form-container">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <input
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="{{ 'search.placeholder' | t }}"
+              class="search-form__input"
+              autofocus
+      >
+      <button type="submit" class="search-form__submit">{{ 'search.submit' | t }}</button>
+    </form>
+  </div>
 
-<form action="{{ routes.search_url }}" method="get" role="search">
-  <input
-    type="search"
-    size="50"
-    name="q"
-    value="{{ search.terms | escape }}"
-    placeholder="{{ 'search.placeholder' | t }}"
-  >
-  <button type="submit">{{ 'search.submit' | t }}</button>
-</form>
+  {%- if search.performed -%}
+    {%- paginate search.results by 20 -%}
+      {%- if search.results_count == 0 -%}
+        <p class="search-no-results">{{ 'search.no_results_html' | t: terms: search.terms }}</p>
+      {%- else -%}
+        <div class="search-results-header">
+          <p class="search-results-count">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
+        </div>
 
-{% if search.performed %}
-  {% if search.results_count == 0 %}
-    <p>{{ 'search.no_results_html' | t: terms: search.terms }}</p>
-  {% else %}
-    <p>{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
-
-    <div class="search-results">
-      {% paginate search.results by 20 %}
-        {% # Search result items may be an article, a page, or a product. %}
-        {% for result in search.results %}
-          <div class="search-result">
-            {% assign featured_image = result.featured_image | default: result.image %}
-            {% if featured_image %}
-              {% render 'image', class: 'search-result__image', image: featured_image, url: result.url, width: 400 %}
-            {% endif %}
-            <div class="search-result__content">
-              <p>
-                {{ result.title | link_to: result.url }}
-                {% if result.price %}
-                  {{ result.price | money_with_currency }}
-                {% endif %}
-              </p>
+        <div class="search-results">
+          {%- for result in search.results -%}
+            <div class="search-result-item">
+              <a href="{{ result.url }}" class="search-result__link">
+                <div class="search-result__image-wrapper">
+                  {%- assign featured_image = result.featured_image | default: result.image -%}
+                  {%- if featured_image -%}
+                    {% render 'image', class: 'search-result__image', image: featured_image, width: 400 %}
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg search-result__image' }}
+                  {%- endif -%}
+                </div>
+                <div class="search-result__content">
+                  <h3 class="search-result__title">{{ result.title }}</h3>
+                  {%- if result.object_type == 'product' and result.price -%}
+                    <p class="search-result__price">{{ result.price | money_with_currency }}</p>
+                  {%- endif -%}
+                </div>
+              </a>
             </div>
-          </div>
-        {% endfor %}
+          {%- endfor -%}
+        </div>
 
-        {{ paginate | default_pagination }}
-      {% endpaginate %}
-    </div>
-  {% endif %}
-{% endif %}
-
-{% stylesheet %}
-  .search-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-  .search-results .prev,
-  .search-results .page,
-  .search-results .next {
-    grid-column: 1 / -1;
-  }
-{% endstylesheet %}
+        {%- if paginate.pages > 1 -%}
+          {{ paginate | default_pagination }}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+</div>
 
 {% schema %}
 {
