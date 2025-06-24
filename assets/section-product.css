@@ -1,5 +1,5 @@
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     color: #121212;
     background-color: #FDFDFD;
 }
@@ -17,12 +17,12 @@ body {
     .product-page-container {
         grid-template-columns: 1.1fr 1fr;
         gap: 60px;
+        align-items: start;
     }
 }
 
 .product-gallery-swiper {
     width: 100%;
-    height: auto;
     position: relative;
 }
 
@@ -30,23 +30,25 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: auto;
 }
 
 .product-image-wrapper {
+    width: 100%;
+    aspect-ratio: 3 / 4;
     border-radius: 8px;
     overflow: hidden;
-    width: 100%;
-    aspect-ratio: 1 / 1;
+    position: relative;
 }
 
 .product-image-wrapper .product-image,
 .product-image-wrapper .placeholder-svg {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center center;
     display: block;
 }
-
 
 .swiper-button-next,
 .swiper-button-prev {
@@ -55,16 +57,25 @@ body {
     border-radius: 50%;
     width: 44px;
     height: 44px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
     transition: background-color 0.3s ease;
 }
+
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
     background-color: rgba(255, 255, 255, 1);
 }
+
 .swiper-button-next:after,
 .swiper-button-prev:after {
     font-size: 20px;
     font-weight: bold;
+}
+
+.swiper-pagination {
+    bottom: 10px !important;
 }
 
 .swiper-pagination-bullet {
@@ -75,8 +86,6 @@ body {
 .swiper-pagination-bullet-active {
     opacity: 1;
 }
-
-
 
 .product-details {
     display: flex;
@@ -195,7 +204,6 @@ body {
     color: #ffffff;
     border-color: #121212;
 }
-
 
 .add-to-cart-btn {
     width: 100%;

@@ -5,18 +5,20 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/product
 {% endcomment %}
 {{ 'section-product.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
 <div class="product-page-container">
 
-  <!-- Add Swiper.js library to your theme for this to become an active gallery -->
   <div class="swiper product-gallery-swiper">
     <div class="swiper-wrapper">
-      {% for image in product.images %}
-        <div class="swiper-slide">
-          <div class="product-image-wrapper">
-            {% render 'image', class: 'product-image', image: image, widths: '400, 600, 800, 1000' %}
+      {% if product.images.size > 0 %}
+        {% for image in product.images %}
+          <div class="swiper-slide">
+            <div class="product-image-wrapper">
+              {% render 'image', class: 'product-image', image: image, widths: '400, 600, 800, 1000' %}
+            </div>
           </div>
-        </div>
+        {% endfor %}
       {% else %}
         {% for i in (1..2) %}
           <div class="swiper-slide">
@@ -25,11 +27,17 @@
             </div>
           </div>
         {% endfor %}
-      {% endfor %}
+      {% endif %}
     </div>
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
+
+    {% if section.settings.show_pagination %}
+      <div class="swiper-pagination"></div>
+    {% endif %}
+
+    {% if section.settings.show_navigation %}
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    {% endif %}
   </div>
 
   <div class="product-details">
@@ -60,7 +68,6 @@
                 {%- liquid
                   assign color_name = value | downcase
                   assign bg_color = ''
-
                   if color_name == 'black titanium'
                     assign bg_color = '#2B2B2B'
                   elsif color_name == 'desert titanium'
@@ -129,3 +136,126 @@
     </div>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const swiperConfig = {
+      loop: true,
+      {% if section.settings.show_pagination %}
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      {% endif %}
+      {% if section.settings.show_navigation %}
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      {% endif %}
+      slidesPerView: {{ section.settings.slides_per_view_mobile }},
+      spaceBetween: {{ section.settings.space_between_mobile }},
+      breakpoints: {
+        768: {
+          slidesPerView: {{ section.settings.slides_per_view_tablet }},
+          spaceBetween: {{ section.settings.space_between_tablet }}
+        },
+        1024: {
+          slidesPerView: {{ section.settings.slides_per_view_desktop }},
+          spaceBetween: {{ section.settings.space_between_desktop }}
+        }
+      }
+    };
+    const swiper = new Swiper('.product-gallery-swiper', swiperConfig);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Swiper Gallery Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show Pagination",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show Navigation Arrows",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Desktop"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_desktop",
+      "label": "Slides per view (Desktop)",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_between_desktop",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between slides (Desktop)",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Tablet"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_tablet",
+      "label": "Slides per view (Tablet)",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "space_between_tablet",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between slides (Tablet)",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_mobile",
+      "label": "Slides per view (Mobile)",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_between_mobile",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between slides (Mobile)",
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Page"
+    }
+  ]
+}
+{% endschema %}
