@@ -1,50 +1,67 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
-  </div>
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      {%- if section.settings.footer_menu.links.size > 0 -%}
+        <div class="footer-block">
+          <h3 class="footer-title">{{ section.settings.menu_title }}</h3>
+          <ul class="footer-link-list">
+            {%- for link in section.settings.footer_menu.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
 
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+      <div class="footer-block">
+        <h3 class="footer-title">{{ section.settings.info_title }}</h3>
+        <div class="footer-info-text">
+          {{ section.settings.store_info }}
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+        <small>&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url }}.</small>
+      </div>
+      {%- if section.settings.show_payment_icons -%}
+        <div class="footer-payment-icons">
+          {{- payment_type_svg_tags -}}
+        </div>
+      {%- endif -%}
+    </div>
   </div>
 </footer>
-
-{% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-  }
-  footer a {
-    text-decoration: none;
-    color: var(--color-foreground);
-  }
-  footer .footer__links,
-  footer .footer__payment {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.footer",
   "settings": [
     {
+      "type": "text",
+      "id": "menu_title",
+      "label": "Menu Title",
+      "default": "Quick Links"
+    },
+    {
       "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "id": "footer_menu",
+      "label": "Footer menu",
+      "default": "footer"
+    },
+    {
+      "type": "text",
+      "id": "info_title",
+      "label": "Info Block Title",
+      "default": "Our Store"
+    },
+    {
+      "type": "richtext",
+      "id": "store_info",
+      "label": "Store Information",
+      "default": "<p>Use this text to share information about your brand with your customers.</p>"
     },
     {
       "type": "checkbox",
