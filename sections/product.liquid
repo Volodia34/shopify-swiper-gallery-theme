@@ -7,13 +7,22 @@
 {{ 'section-product.css' | asset_url | stylesheet_tag }}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
-<div class="product-page-container">
+<div class="product-page-container"
+     data-show-pagination="{{ section.settings.show_pagination }}"
+     data-show-navigation="{{ section.settings.show_navigation }}"
+     data-slides-per-view-mobile="{{ section.settings.slides_per_view_mobile }}"
+     data-space-between-mobile="{{ section.settings.space_between_mobile }}"
+     data-slides-per-view-tablet="{{ section.settings.slides_per_view_tablet }}"
+     data-space-between-tablet="{{ section.settings.space_between_tablet }}"
+     data-slides-per-view-desktop="{{ section.settings.slides_per_view_desktop }}"
+     data-space-between-desktop="{{ section.settings.space_between_desktop }}"
+>
 
   <div class="swiper product-gallery-swiper">
     <div class="swiper-wrapper">
       {% if product.images.size > 0 %}
         {% for image in product.images %}
-          <div class="swiper-slide">
+          <div class="swiper-slide" data-color="{{ image.alt | escape | downcase }}">
             <div class="product-image-wrapper">
               {% render 'image', class: 'product-image', image: image, widths: '400, 600, 800, 1000' %}
             </div>
@@ -62,7 +71,7 @@
       {% for option in product.options_with_values %}
         <div class="product-option-group">
           <label class="product-option-label">{{ option.name }}: <span class="selected-option-value">{{ option.selected_value }}</span></label>
-          <div class="product-option-values">
+          <div class="product-option-values" data-option-name="{{ option.name | escape }}">
             {% if option.name == 'Color' %}
               {% for value in option.values %}
                 {%- liquid
@@ -138,38 +147,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const swiperConfig = {
-      loop: true,
-      {% if section.settings.show_pagination %}
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      {% endif %}
-      {% if section.settings.show_navigation %}
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      {% endif %}
-      slidesPerView: {{ section.settings.slides_per_view_mobile }},
-      spaceBetween: {{ section.settings.space_between_mobile }},
-      breakpoints: {
-        768: {
-          slidesPerView: {{ section.settings.slides_per_view_tablet }},
-          spaceBetween: {{ section.settings.space_between_tablet }}
-        },
-        1024: {
-          slidesPerView: {{ section.settings.slides_per_view_desktop }},
-          spaceBetween: {{ section.settings.space_between_desktop }}
-        }
-      }
-    };
-    const swiper = new Swiper('.product-gallery-swiper', swiperConfig);
-  });
-</script>
+<script src="{{ 'product-page.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {

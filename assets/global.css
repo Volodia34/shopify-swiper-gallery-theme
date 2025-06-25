@@ -1,34 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-    /* Colors */
-    --color-primary: #111827; /* Dark Gray */
-    --color-secondary: #4B5563; /* Medium Gray */
-    --color-accent: #3B82F6; /* Blue */
-    --color-accent-hover: #2563EB; /* Darker Blue */
-    --color-background: #F9FAFB; /* Off-white */
-    --color-foreground: #1F2937; /* Darker text color */
-    --color-surface: #FFFFFF; /* White for cards/surfaces */
+    --color-primary: #111827;
+    --color-secondary: #4B5563;
+    --color-accent: #3B82F6;
+    --color-accent-hover: #2563EB;
+    --color-background: #F9FAFB;
+    --color-foreground: #1F2937;
+    --color-surface: #FFFFFF;
     --color-border: rgba(0, 0, 0, 0.08);
 
-    /* Typography */
     --font-primary--family: 'Inter', sans-serif;
     --font-heading--family: 'Inter', sans-serif;
     --font-body-scale: 1.0;
     --font-heading-scale: 1.0;
 
-    /* Layout */
     --page-width: 1280px;
     --page-margin: 24px;
     --section-spacing: 60px;
 
-    /* Style */
     --style-border-radius: 12px;
     --style-border-radius-inputs: 8px;
     --style-box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --style-box-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
-    /* Animation */
     --duration-short: 0.15s;
     --duration-medium: 0.3s;
     --duration-long: 0.5s;
