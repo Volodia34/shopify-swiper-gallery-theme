@@ -94,4 +94,39 @@ function initProductPage() {
     }
 }
 
+
+class ProductAccordion extends HTMLElement {
+    constructor() {
+        super();
+        this.allowMultiple = this.dataset.allowMultiple === 'true';
+        this.buttons = this.querySelectorAll('.accordion-title');
+        this.contents = this.querySelectorAll('.accordion-content');
+    }
+
+    connectedCallback() {
+        this.buttons.forEach((button, index) => {
+            button.addEventListener('click', () => this.toggle(index));
+        });
+    }
+
+    toggle(selectedIndex) {
+        const isExpanded = this.buttons[selectedIndex].getAttribute('aria-expanded') === 'true';
+
+        if (!this.allowMultiple) {
+            this.buttons.forEach((button, index) => {
+                if (index !== selectedIndex) {
+                    button.setAttribute('aria-expanded', 'false');
+                    this.contents[index].hidden = true;
+                }
+            });
+        }
+
+        this.buttons[selectedIndex].setAttribute('aria-expanded', !isExpanded);
+        this.contents[selectedIndex].hidden = isExpanded;
+    }
+}
+
+if (!customElements.get('product-accordion')) {
+    customElements.define('product-accordion', ProductAccordion);
+}
 initProductPage();
