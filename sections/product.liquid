@@ -20,33 +20,33 @@
 
   <div class="swiper product-gallery-swiper">
     <div class="swiper-wrapper">
-      {% if product.images.size > 0 %}
-        {% for image in product.images %}
+      {%- if product.images.size > 0 -%}
+        {%- for image in product.images -%}
           <div class="swiper-slide" data-color="{{ image.alt | escape | downcase }}">
             <div class="product-image-wrapper">
               {% render 'image', class: 'product-image', image: image, widths: '400, 600, 800, 1000' %}
             </div>
           </div>
-        {% endfor %}
-      {% else %}
-        {% for i in (1..2) %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..2) -%}
           <div class="swiper-slide">
             <div class="product-image-wrapper">
               {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
             </div>
           </div>
-        {% endfor %}
-      {% endif %}
+        {%- endfor -%}
+      {%- endif -%}
     </div>
 
-    {% if section.settings.show_pagination %}
+    {%- if section.settings.show_pagination -%}
       <div class="swiper-pagination"></div>
-    {% endif %}
+    {%- endif -%}
 
-    {% if section.settings.show_navigation %}
+    {%- if section.settings.show_navigation -%}
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
-    {% endif %}
+    {%- endif -%}
   </div>
 
   <div class="product-details">
@@ -65,15 +65,15 @@
 
     <p class="price">{{ product.price | money | default: "$35.00 USD" }}</p>
 
-    {% form 'product', product, class: 'product-form' %}
+    {%- form 'product', product, class: 'product-form' -%}
       <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
 
-      {% for option in product.options_with_values %}
+      {%- for option in product.options_with_values -%}
         <div class="product-option-group">
           <label class="product-option-label">{{ option.name }}: <span class="selected-option-value">{{ option.selected_value }}</span></label>
           <div class="product-option-values" data-option-name="{{ option.name | escape }}">
-            {% if option.name == 'Color' %}
-              {% for value in option.values %}
+            {%- if option.name == 'Color' -%}
+              {%- for value in option.values -%}
                 {%- liquid
                   assign color_name = value | downcase
                   assign bg_color = ''
@@ -95,54 +95,29 @@
                         title="{{ value }}"
                         data-value="{{ value | escape }}">
                 </div>
-              {% endfor %}
-            {% else %}
-              {% for value in option.values %}
+              {%- endfor -%}
+            {%- else -%}
+              {%- for value in option.values -%}
                 <div
                         class="size-swatch {% if option.selected_value == value %}selected{% endif %}"
                         data-value="{{ value | escape }}">
                   {{ value }}
                 </div>
-              {% endfor %}
-            {% endif %}
+              {%- endfor -%}
+            {%- endif -%}
           </div>
         </div>
-      {% endfor %}
+      {%- endfor -%}
 
       <button type="submit" class="add-to-cart-btn">Add to cart</button>
       {{ form | payment_button }}
-    {% endform %}
+    {%- endform -%}
 
     <div class="product-description">
       <p>{{ product.description | default: "Our best-selling matte lip kit is your ready-to-go lip routine for a long-lasting, matte lip. This matte liquid lipstick and lip liner duo feature highly pigmented, 8+ hour wear formulas that offer full coverage payoff with a smudge-resistant finish." }}</p>
     </div>
 
-    <div class="product-accordions">
-      <details>
-        <summary>Size guide <span class="chevron"></span></summary>
-        <div class="accordion-content">
-          <p>Details about sizing will be here.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Model's size <span class="chevron"></span></summary>
-        <div class="accordion-content">
-          <p>Information about the model's size will be here.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Details <span class="chevron"></span></summary>
-        <div class="accordion-content">
-          <p>Further product details will be here.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Care guide <span class="chevron"></span></summary>
-        <div class="accordion-content">
-          <p>Instructions on how to care for the product will be here.</p>
-        </div>
-      </details>
-    </div>
+    {% render 'product-accordion', allow_multiple: section.settings.allow_multiple_accordions %}
   </div>
 </div>
 
@@ -167,6 +142,12 @@
       "type": "checkbox",
       "id": "show_navigation",
       "label": "Show Navigation Arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_multiple_accordions",
+      "label": "Allow multiple accordion tabs to be open",
       "default": true
     },
     {

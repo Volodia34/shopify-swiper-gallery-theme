@@ -1,0 +1,42 @@
+{% comment %}
+  Renders product accordion from two separate metafield lists (titles and descriptions).
+  Accepts:
+  - allow_multiple: (boolean) If true, multiple accordion items can be open at once.
+{% endcomment %}
+
+{%- liquid
+    assign accordion_titles = product.metafields.custom.accordion_titles.value
+    assign accordion_descriptions = product.metafields.custom.accordion_descriptions.value
+-%}
+
+<script>
+    console.log('Accordion Titles:', {{ accordion_titles | json }});
+    console.log('Accordion Descriptions:', {{ accordion_descriptions | json }});
+</script>
+
+{%- if accordion_titles.size > 0 and accordion_descriptions.size > 0 -%}
+    <product-accordion class="product-accordion" data-allow-multiple="{{ allow_multiple | json }}">
+        {%- for title in accordion_titles -%}
+            {%- liquid
+                assign index = forloop.index0
+                assign description = accordion_descriptions[index]
+            -%}
+            {%- if title != blank and description != blank -%}
+                <div class="accordion-item">
+                    <button class="accordion-title" aria-expanded="false">
+                        <span>{{ title | escape }}</span>
+                        <svg aria-hidden="true" focusable="false" class="icon icon-chevron-down" viewBox="0 0 10 6">
+                            <path d="M9 1L5 5 1 1" stroke="currentColor" stroke-width="1.5" fill="none"
+                                  fill-rule="evenodd"/>
+                        </svg>
+                    </button>
+                    <div class="accordion-content" hidden>
+                        <div class="accordion-content__inner">
+                            {{ description }}
+                        </div>
+                    </div>
+                </div>
+            {%- endif -%}
+        {%- endfor -%}
+    </product-accordion>
+{%- endif -%}
